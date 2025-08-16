@@ -146,7 +146,11 @@ export class Answer {
     );
 
     const result = await response.json();
-    console.log(result.status);
+    console.log(result);
+
+    const allCorrect = result.feedback.every(
+      (letterInfo) => letterInfo.status === "correct"
+    );
 
     if (result.status === "invalid") {
       const message = result.message;
@@ -154,8 +158,14 @@ export class Answer {
         messagePlace.innerText = "";
       }, 3000);
       messagePlace.innerText = message;
-    } else if (this.rowIndex > this.game.currentAttempt) {
-      messagePlace.innerText = "Game Over!";
+    } else if (allCorrect) {
+      this.colorizeInputs(result);
+      this.deactivate();
+      this.game.gameWon = true;
+      messagePlace.innerText = "Congratulations! You found the word!";
+      setTimeout(() => {
+        messagePlace.innerText = "";
+      }, 3000);
     } else {
       this.colorizeInputs(result);
       this.game.goToNextAttempt();

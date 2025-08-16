@@ -30,3 +30,4 @@ coverage/
 # IDE et éditeurs
 .vscode/
 .idea/
+node_modules/
